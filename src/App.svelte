@@ -1,20 +1,54 @@
 <script lang="ts">
   import { onMount, afterUpdate, tick } from 'svelte'
+  import {
+    intervalToDuration,
+    differenceInDays,
+    differenceInMilliseconds,
+  } from 'date-fns'
   export const message = 'default'
+
+  const toGoRaw = intervalToDuration({
+    start: Date.now(),
+    end: new Date(2021, 5, 11, 18),
+  })
+
+  let days = 0,
+    hours = 0,
+    mins = 0,
+    secs = 0,
+    ms = 0
+
+  function timeLoop() {
+    const toGoDuration = intervalToDuration({
+      start: Date.now(),
+      end: new Date(2021, 5, 11, 18),
+    })
+    days = differenceInDays(new Date(2021, 5, 11, 18), Date.now())
+    hours = toGoDuration.hours
+    mins = toGoDuration.minutes
+    secs = toGoDuration.seconds
+    ms = differenceInMilliseconds(new Date(2021, 5, 11, 18), Date.now())
+
+    requestAnimationFrame(timeLoop)
+  }
+  requestAnimationFrame(timeLoop)
 
   onMount(async () => {
     let hero = document.getElementById('hero')
     let logo = document.getElementById('logo')
+    let countdown = document.getElementById('countdown')
 
     window.addEventListener('resize', (e) => {
       let hero = document.getElementById('hero')
       const logoOffset = hero.offsetTop - 1 + 'px'
       logo.style.top = logoOffset
+      countdown.style.bottom = logoOffset
     })
 
     hero.addEventListener('load', (e) => {
       const logoOffset = (e.target as HTMLElement).offsetTop - 1 + 'px'
       logo.style.top = logoOffset
+      countdown.style.bottom = logoOffset
     })
   })
 
@@ -30,9 +64,15 @@
       alt="Sol and Ky Looking all Myspacey and deep."
     />
 
-    <h1 id="countdown">
-      8 <span>w</span>eeks 2 <span>d</span>ays 23 <span>h</span>ours
-    </h1>
+    <div id="countdown">
+      <h1>
+        {days} <span>d</span>ays {hours} <span>h</span>ours
+      </h1>
+      <h1>
+        {mins} <span>m</span>ins {secs} <span>s</span>ecs
+      </h1>
+      <h1 id="milliseconds">{ms}</h1>
+    </div>
   </div>
 </main>
 
@@ -46,7 +86,6 @@
 
   .container {
     position: relative;
-    /* max-width: 1650px; */
     max-height: 100%;
     display: flex;
     flex-direction: column;
@@ -85,12 +124,6 @@
     font-family: 'RED';
     font-size: calc(5vw);
     font-weight: 100;
-    padding: 32px;
-    background: linear-gradient(
-      90deg,
-      rgba(252, 249, 249, 0.534) 0%,
-      rgba(0, 212, 255, 0) 100%
-    );
   }
 
   h1 > span {
@@ -98,10 +131,18 @@
   }
 
   #countdown {
+    padding: 2em;
     position: absolute;
     left: 0;
-    top: 66%;
-    transform: translate(0%, -50%);
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(252, 249, 249, 0.534) 0%,
+      rgba(0, 212, 255, 0) 100%
+    );
+  }
+
+  #milliseconds {
   }
 
   @media (min-width: 200px) {
