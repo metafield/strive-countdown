@@ -1,66 +1,112 @@
 <script lang="ts">
-  export let message: string;
-  let typed = '';
+  import { onMount, afterUpdate, tick } from 'svelte'
+  export const message = 'default'
 
-  const type = () => {
-    if (typed === message) return;
-    typed += message[typed.length];
-    setTimeout(type, 200);
-  };
+  onMount(async () => {
+    let hero = document.getElementById('hero')
+    let logo = document.getElementById('logo')
 
-  type();
+    window.addEventListener('resize', (e) => {
+      let hero = document.getElementById('hero')
+      const logoOffset = hero.offsetTop - 1 + 'px'
+      logo.style.top = logoOffset
+    })
+
+    hero.addEventListener('load', (e) => {
+      const logoOffset = (e.target as HTMLElement).offsetTop - 1 + 'px'
+      logo.style.top = logoOffset
+    })
+  })
+
+  afterUpdate(async () => {})
 </script>
 
 <main>
-  <h1>{typed}</h1>
-  <div class="carat">|</div>
+  <div class="container">
+    <img id="logo" src="/logo.webp" alt="The Guilty Gear Strive Logo" />
+    <img
+      id="hero"
+      src="/strive.webp"
+      alt="Sol and Ky Looking all Myspacey and deep."
+    />
 
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-    how to build Svelte apps.
-  </p>
+    <h1 id="countdown">
+      8 <span>w</span>eeks 2 <span>d</span>ays 23 <span>h</span>ours
+    </h1>
+  </div>
 </main>
 
 <style>
   main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
+    background-color: black;
+    height: 100%;
+    display: flex;
+    justify-content: center;
   }
 
-  h1,
-  .carat {
-    display: inline;
-    color: #ff3e00;
+  .container {
+    position: relative;
+    /* max-width: 1650px; */
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #logo {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    padding: 32px;
+    width: 75%;
+    max-width: 1080px;
+    background: linear-gradient(
+      90deg,
+      rgb(26, 21, 21) 0%,
+      rgba(0, 212, 255, 0) 100%
+    );
+  }
+
+  #hero {
+    background-color: #651216;
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: fill;
+    object-position: right;
+  }
+
+  h1 {
+    text-shadow: 3px 3px black;
+    color: rgba(255, 255, 255, 0.925);
     text-transform: uppercase;
     font-family: 'RED';
-    font-size: 6em;
+    font-size: calc(5vw);
     font-weight: 100;
+    padding: 32px;
+    background: linear-gradient(
+      90deg,
+      rgba(252, 249, 249, 0.534) 0%,
+      rgba(0, 212, 255, 0) 100%
+    );
   }
 
-  .carat {
-    animation: 1s blink ease infinite;
+  h1 > span {
+    color: #7b1a1d;
   }
 
-  .carat:hover {
-    opacity: 0;
+  #countdown {
+    position: absolute;
+    left: 0;
+    top: 66%;
+    transform: translate(0%, -50%);
   }
 
-  @keyframes blink {
-    from,
-    to {
-      opacity: 0;
-    }
-
-    50% {
-      opacity: 1;
-    }
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
+  @media (min-width: 200px) {
+    #hero {
+      object-fit: contain;
     }
   }
 </style>

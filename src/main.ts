@@ -1,10 +1,10 @@
-import App from './App.svelte';
+import App from './App.svelte'
 
 const app = new App({
   target: document.body,
   props: {
-    message: 'HEAVEN OR HELL',
+    message: 'string',
   },
-});
+})
 
-export default app;
+export default app
