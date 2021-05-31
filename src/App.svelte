@@ -110,9 +110,5 @@
     #hero {
       object-position: 85% 50%;
     }
-
-    h1 > span {
-      color: blue;
-    }
   }
 </style>
