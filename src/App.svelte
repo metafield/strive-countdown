@@ -16,13 +16,13 @@
   function timeLoop() {
     const toGoDuration = intervalToDuration({
       start: Date.now(),
-      end: new Date(2021, 5, 11, 18),
+      end: new Date(2021, 5, 11, 0),
     })
-    days = differenceInDays(new Date(2021, 5, 11, 18), Date.now())
+    days = differenceInDays(new Date(2021, 5, 11, 0), Date.now())
     hours = toGoDuration.hours
     mins = toGoDuration.minutes
     secs = toGoDuration.seconds
-    ms = differenceInMilliseconds(new Date(2021, 5, 11, 18), Date.now())
+    ms = differenceInMilliseconds(new Date(2021, 5, 11, 0), Date.now())
 
     requestAnimationFrame(timeLoop)
   }
